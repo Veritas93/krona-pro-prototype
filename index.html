@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="ru">
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<title>Крона.Про — промышленный альпинизм и арбористика в Петрозаводске</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Снос аварийных деревьев, кронирование, очистка кровель и высотные работы в Петрозаводске и Карелии. Работаем по договору, с актом и страхованием ответственности.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;800;900&display=swap">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+
+<style>
+  /* ============================================================
+     КРОНА.ПРО — v4, сцена с разбором дерева
+     Визуальный мир наследует v2 («наряд-допуск»).
+     MOTION_INTENSITY: 8. Вся хореография мотивирована:
+       герой      — иерархия чтения
+       счётчики   — внимание к доказательству
+       подход     — липкий заголовок, сопровождение списка
+       процесс    — горизонталь повторяет линейность этапов
+       объекты    — параллакс даёт глубину кадрам
+     Путь к заявке (форма, кнопки, телефон) не анимируется.
+     ============================================================ */
+
+  :root{
+    color-scheme: light dark;
+
+    /* Бумага тёплая: холодный серый рядом с фотографией дерева
+       отдавал в синеву и выглядел мертвее самого снимка. */
+    --paper:    #F6F2EA;
+    --paper-2:  #FDFBF7;
+    --paper-3:  #EBE5D9;
+
+    --ink:      #1A1613;
+    --ink-2:    #524C44;
+    --ink-3:    #7A736A;
+
+    --rule:     #DED7C8;
+    --rule-2:   #C5BCA9;
+
+    /* Два цвета с разными обязанностями.
+       Оранжевый — действие и опасность: кнопки, ошибки, верёвка.
+       Зелёный — предмет работы и живое: услуги, факты, земля.
+       Смешивать нельзя: иначе «оранжевое» перестанет значить «нажми». */
+    --hi:        #EE5522;  /* крупный текст, иконки, линии */
+    --hi-strong: #BE3A0D;  /* плашки с белым текстом и мелкий текст: 5.5:1 */
+    --hi-deep:   #972D08;  /* наведение на плашку */
+    --hi-wash:   #FBE7DE;
+
+    --grn:      #2F5D3C;
+
+    --r: 0px;
+
+    --gutter: clamp(20px, 4vw, 40px);
+    --sec:    clamp(72px, 9vw, 132px);
+
+    --ease: cubic-bezier(.16, 1, .3, 1);
+    /* сильный ease-out для интерфейсных переходов */
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root{
+      /* Тёмная тема тоже уходит в тепло: иначе фотодерево
+         на холодном фоне читается как вырезка из другого макета. */
+      --paper:   #14120F;
+      --paper-2: #1B1814;
+      --paper-3: #221E19;
+      --ink:     #EDE8DF;
+      --ink-2:   #ADA599;
+      --ink-3:   #928A7E;
+      --rule:    #2E2922;
+      --rule-2:  #3F3931;
+
+      /* На тёмном фоне белый текст на плашке не нужен — плашка
+         сама светлая, поэтому все три роли сходятся в один цвет. */
+      --hi:        #FF7044;
+      --hi-strong: #FF7044;
+      /* Наведение на кнопку: текст на ней белый, поэтому плашка
+         уходит в глубокий тон, а не в светлый. Светлый давал 2.3:1. */
+      --hi-deep:   #C2440F;
+      --hi-wash:   #2C1810;
+
+      --grn:      #7FB98C;
+    }
+  }
+
+  *{ box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Golos Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  h1,h2,h3,h4{
+    margin:0;
+    font-weight:800;
+    letter-spacing:-0.025em;
+    line-height:1.08;
+    text-wrap:balance;
+  }
+  p{ margin:0; }
+  ul{ list-style:none; margin:0; padding:0; }
+  a{ color:inherit; text-decoration:none; }
+  img{ display:block; max-width:100%; }
+
+  .wrap{ max-width:1280px; margin-inline:auto; padding-inline:var(--gutter); }
+  section{ padding-block:var(--sec); }
+
+  .lede{ color:var(--ink-2); font-size:clamp(16px,1.5vw,18px); max-width:58ch; }
+
+  a:focus-visible, button:focus-visible, summary:focus-visible,
+  input:focus-visible, textarea:focus-visible{
+    outline:3px solid var(--hi); outline-offset:3px;
+  }
+
+  /* ---------- кнопки ---------- */
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    padding:15px 26px;
+    border-radius:var(--r);
+    border:1.5px solid transparent;
+    font:inherit; font-weight:700; font-size:15px; letter-spacing:-0.01em;
+    white-space:nowrap; cursor:pointer;
+    transition:transform 160ms var(--ease-out),
+               background 160ms ease, color 160ms ease, border-color 160ms ease;
+  }
+  .btn-primary{ background:var(--ink); color:var(--paper); }
+  .btn-primary:hover{ background:var(--hi-deep); color:#FFFFFF; }
+  .btn-secondary{ background:transparent; color:var(--ink); border-color:var(--rule-2); }
+  .btn-secondary:hover{ border-color:var(--ink); }
+  /* Обратная связь на нажатие. Масштаб, а не сдвиг: сдвиг на 1px не читается. */
+  .btn:active{ transform:scale(0.97); }
+  @media (prefers-reduced-motion: reduce){
+    .btn{ transition:background 160ms ease, color 160ms ease, border-color 160ms ease; }
+    .btn:active{ transform:none; }
+  }
+
+  /* ---------- шапка ---------- */
+  header.site{
+    position:sticky; top:0; z-index:50; height:68px;
+    display:flex; align-items:center;
+    background:color-mix(in srgb, var(--paper) 92%, transparent);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--rule);
+  }
+  .nav{ display:flex; align-items:center; justify-content:space-between; gap:24px; width:100%; }
+  .brand{ display:flex; align-items:baseline; gap:2px; font-weight:900; font-size:19px; letter-spacing:-0.04em; }
+  .brand em{ font-style:normal; color:var(--hi); }
+  .nav-links{ display:flex; gap:26px; }
+  .nav-links a{ font-size:14px; font-weight:600; color:var(--ink-2); padding-block:4px; border-bottom:2px solid transparent; }
+  .nav-links a:hover{ color:var(--ink); border-bottom-color:var(--hi); }
+  .nav-right{ display:flex; align-items:center; gap:18px; }
+  .nav-tel{ font-weight:700; font-size:15px; letter-spacing:-0.01em; }
+  @media (max-width:1040px){ .nav-links{ display:none; } }
+  @media (max-width:560px){ .nav-tel{ display:none; } }
+
+  /* ---------- индикатор прогресса чтения ---------- */
+  .progress{
+    position:fixed; top:0; left:0; right:0; height:2px; z-index:60;
+    background:var(--hi);
+    transform:scaleX(0); transform-origin:0 50%;
+    pointer-events:none;
+  }
+
+  /* ============================================================
+     СЦЕНА: дерево на заднем плане
+     Закреплено в окне, разбирается по мере прокрутки страницы.
+     Порядок разбора настоящий: подъём, крона сверху вниз,
+     затем ствол секциями, затем пень. В финале остаётся земля.
+     Слои — растровые, нарезаны из одного снимка дерева, поэтому
+     сходятся пиксель в пиксель и не дрожат на стыках.
+     ============================================================ */
+  .stage{
+    position:fixed; inset:0; z-index:0;
+    pointer-events:none;
+    display:flex; align-items:center; justify-content:flex-end;
+    padding-right:clamp(0px, 2vw, 48px);
+    /* Фотослои перебивают текст, если дать им полную силу. */
+    opacity:.5;
+  }
+  .stage svg{ height:min(94vh, 1000px); width:auto; }
+
+  /* Слои не масштабируются покадрово: анимируется только трансформ. */
+  .stage .layer{ will-change:transform, opacity; }
+
+  .stage .lawn{ fill:none; stroke:var(--grn); stroke-width:2; stroke-linecap:round; }
+  .stage .rope{ fill:none; stroke:var(--hi); stroke-width:1.4; opacity:.75; }
+
+  @media (max-width:940px){
+    .stage{ justify-content:center; opacity:.22; padding-right:0; }
+    .stage svg{ height:min(78vh, 720px); }
+  }
+
+  /* содержимое лежит поверх сцены; фиксированные элементы свой слой уже имеют */
+  main, footer.site{ position:relative; z-index:2; }
+
+  /* ---------- герой ---------- */
+  .hero{ padding-block:clamp(40px,6vw,88px) clamp(48px,6vw,96px); }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:minmax(0,7fr) minmax(0,5fr);
+    gap:clamp(28px,4vw,56px);
+    align-items:end;
+  }
+  @media (max-width:940px){ .hero-grid{ grid-template-columns:1fr; align-items:start; } }
+
+  .hero h1{
+    font-size:clamp(36px,5.6vw,70px);
+    font-weight:900; letter-spacing:-0.045em;
+    margin-bottom:22px;
+  }
+  .hero h1 b{ font-weight:900; color:var(--hi); }
+
+  /* маска для построчного подъёма заголовка */
+  .line{ display:block; overflow:hidden; padding-bottom:.08em; }
+  .line > span{ display:block; }
+
+  .hero-actions{ display:flex; gap:12px; flex-wrap:wrap; margin-top:30px; }
+
+  /* ---------- слот под фото ---------- */
+  .shot{
+    position:relative; overflow:hidden;
+    background:repeating-linear-gradient(135deg, var(--paper-3) 0 10px, var(--paper-2) 10px 20px);
+    border:1px solid var(--rule-2);
+    display:flex; align-items:flex-end; padding:16px;
+  }
+  .shot span{
+    position:relative; z-index:2;
+    font-size:12px; font-weight:600; line-height:1.4; color:var(--ink-3);
+    background:var(--paper-2);
+    border-left:3px solid var(--hi);
+    padding:8px 11px; max-width:34ch;
+  }
+  .shot-hero{ aspect-ratio:4/5; }
+  @media (max-width:940px){ .shot-hero{ aspect-ratio:16/10; } }
+
+  /* Слой параллакса. will-change назначается скриптом только пока слой в кадре:
+     семь постоянных композитных слоёв обходятся дороже, чем дают. */
+  .shot-layer{
+    position:absolute; inset:-12% 0;
+    background:repeating-linear-gradient(135deg, var(--paper-3) 0 10px, var(--paper-2) 10px 20px);
+  }
+
+  /* ---------- полоса фактов ---------- */
+  .facts{
+    border-block:1px solid var(--rule);
+    background:var(--paper-2);
+    padding-block:clamp(32px,4vw,52px);
+  }
+  .facts-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(18px,3vw,36px); }
+  @media (max-width:820px){ .facts-grid{ grid-template-columns:repeat(2,1fr); } }
+  .fact{ border-left:2px solid var(--grn); padding-left:16px; }
+  .fact b{
+    display:block;
+    font-size:clamp(30px,3.6vw,46px);
+    font-weight:900; letter-spacing:-0.05em; line-height:1;
+    margin-bottom:8px;
+    font-variant-numeric:tabular-nums;
+  }
+  .fact span{ font-size:13.5px; color:var(--ink-2); line-height:1.4; display:block; }
+
+  /* ---------- заголовок раздела ---------- */
+  .head{ max-width:62ch; margin-bottom:clamp(36px,4.5vw,64px); }
+  .head h2{ font-size:clamp(28px,4.2vw,52px); margin-bottom:18px; }
+
+  /* ---------- услуги ---------- */
+  .clusters{
+    display:grid; grid-template-columns:1.25fr 1fr 1fr;
+    gap:1px; background:var(--rule); border:1px solid var(--rule);
+  }
+  @media (max-width:980px){ .clusters{ grid-template-columns:1fr; } }
+  .cluster{
+    background:var(--paper-2);
+    padding:clamp(24px,2.6vw,36px);
+    display:flex; flex-direction:column; gap:18px;
+  }
+  .cluster.lead{ background:var(--paper-3); }
+  .cluster.lead li{ border-top-color:var(--rule-2); }
+  .cluster-top{ display:flex; align-items:center; gap:12px; }
+  .cluster-top i{ font-size:26px; color:var(--grn); }
+  .cluster h3{ font-size:21px; letter-spacing:-0.03em; }
+  .cluster > p{ color:var(--ink-2); font-size:14.5px; }
+  .cluster ul{ display:flex; flex-direction:column; margin-top:auto; }
+  .cluster li{
+    font-size:14.5px; padding-block:13px;
+    border-top:1px solid var(--rule);
+    display:flex; gap:11px; align-items:flex-start;
+  }
+  .cluster li i{ color:var(--grn); font-size:16px; margin-top:2px; flex:none; }
+  /* Движение по наведению только для мыши: тап на тач-экране даёт ложный hover. */
+  @media (hover: hover) and (pointer: fine){
+    .cluster li i{ transition:transform 200ms var(--ease-out); }
+    .cluster li:hover i{ transform:translateX(4px); }
+  }
+  @media (prefers-reduced-motion: reduce){ .cluster li i{ transition:none; } }
+
+  .note-row{
+    margin-top:clamp(28px,3vw,44px);
+    display:flex; flex-wrap:wrap; gap:20px;
+    align-items:center; justify-content:space-between;
+    border-top:2px solid var(--ink); padding-top:22px;
+  }
+  .note-row p{ font-size:15px; font-weight:600; max-width:52ch; }
+
+  /* ---------- подход: липкий заголовок ---------- */
+  .approach{ background:var(--paper-2); border-block:1px solid var(--rule); }
+  .approach-grid{
+    display:grid; grid-template-columns:minmax(0,5fr) minmax(0,7fr);
+    gap:clamp(32px,5vw,80px);
+    align-items:start;
+  }
+  @media (max-width:900px){ .approach-grid{ grid-template-columns:1fr; } }
+  .approach-title{ position:sticky; top:110px; }
+  @media (max-width:900px){ .approach-title{ position:static; } }
+  .approach-title h2{ font-size:clamp(28px,4vw,50px); margin-bottom:18px; }
+
+  .register + .register{ margin-top:clamp(40px,5vw,72px); }
+  .register h3{
+    font-size:clamp(19px,2.1vw,24px);
+    padding-bottom:16px; border-bottom:2px solid var(--ink); margin-bottom:6px;
+  }
+  .register li{
+    display:grid; grid-template-columns:auto 1fr; gap:16px;
+    padding-block:18px; border-bottom:1px solid var(--rule);
+    align-items:baseline;
+  }
+  .register li b{ font-size:14px; font-weight:800; color:var(--hi-strong); letter-spacing:0.02em; font-variant-numeric:tabular-nums; }
+  .register li span{ font-size:15.5px; }
+  .register li em{ display:block; font-style:normal; font-size:13.5px; color:var(--ink-3); margin-top:4px; }
+
+  /* ---------- процесс: горизонтальная панорама ---------- */
+  .pan{ position:relative; overflow:hidden; padding-block:0; }
+  .pan-track{
+    display:flex; align-items:stretch;
+    min-height:100dvh;
+    will-change:transform;
+  }
+  .pan-intro{
+    flex:none; width:min(86vw, 520px);
+    padding:0 clamp(24px,5vw,72px);
+    display:flex; flex-direction:column; justify-content:center; gap:18px;
+  }
+  .pan-intro h2{ font-size:clamp(30px,4.2vw,52px); }
+  .pan-step{
+    flex:none; width:min(78vw, 380px);
+    border-left:1px solid var(--rule);
+    padding:clamp(32px,4vw,56px) clamp(24px,2.6vw,40px);
+    display:flex; flex-direction:column; gap:14px; justify-content:center;
+  }
+  .pan-step b{
+    font-size:clamp(56px,7vw,96px);
+    font-weight:900; line-height:.9; letter-spacing:-0.06em;
+    color:var(--hi);
+    font-variant-numeric:tabular-nums;
+  }
+  .pan-step h3{ font-size:clamp(19px,2vw,24px); letter-spacing:-0.025em; }
+  .pan-step p{ font-size:15px; color:var(--ink-2); max-width:34ch; }
+  .pan-tail{ flex:none; width:clamp(24px,6vw,80px); }
+
+  /* запасной режим: обычная лента со снапом */
+  .pan.static .pan-track{
+    min-height:0;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    transform:none !important;
+  }
+  .pan.static .pan-intro,
+  .pan.static .pan-step{ scroll-snap-align:start; }
+  .pan.static .pan-intro{ padding-block:clamp(48px,7vw,80px); }
+
+  /* ---------- объекты ---------- */
+  .compare{
+    --pos:52%;
+    position:relative; aspect-ratio:16/9;
+    border:1px solid var(--rule-2); overflow:hidden; margin-bottom:14px;
+  }
+  .compare-side{
+    position:absolute; inset:0;
+    display:flex; align-items:flex-end; padding:18px;
+    background:repeating-linear-gradient(135deg, var(--paper-3) 0 10px, var(--paper-2) 10px 20px);
+  }
+  .compare-side.before{
+    width:var(--pos); overflow:hidden;
+    border-right:2px solid var(--hi);
+    background:repeating-linear-gradient(135deg, var(--paper-3) 0 10px, var(--paper) 10px 20px);
+  }
+  .compare-tag{
+    font-size:12px; font-weight:800; letter-spacing:0.08em;
+    background:var(--ink); color:var(--paper);
+    padding:6px 11px; white-space:nowrap;
+  }
+  .compare-grip{
+    position:absolute; top:50%; left:var(--pos);
+    width:44px; height:44px; transform:translate(-50%,-50%);
+    background:var(--hi-strong); color:#FFFFFF;
+    display:flex; align-items:center; justify-content:center;
+    font-size:20px; pointer-events:none;
+  }
+  .compare input[type=range]{
+    position:absolute; inset:0; width:100%; height:100%;
+    margin:0; opacity:0; cursor:ew-resize;
+  }
+
+  .works{
+    display:grid; grid-template-columns:repeat(3,1fr);
+    gap:clamp(14px,1.6vw,24px);
+    margin-top:clamp(28px,3vw,44px);
+  }
+  @media (max-width:900px){ .works{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:560px){ .works{ grid-template-columns:1fr; } }
+  .work .shot{ aspect-ratio:4/3; margin-bottom:12px; }
+  .work h3{ font-size:15.5px; letter-spacing:-0.02em; margin-bottom:3px; }
+  .work p{ font-size:13.5px; color:var(--ink-3); }
+
+  .disclaimer{
+    margin-top:clamp(24px,3vw,40px);
+    font-size:13.5px; color:var(--ink-2);
+    border-left:3px solid var(--hi);
+    padding:12px 16px; background:var(--paper-2);
+    max-width:76ch;
+  }
+
+  /* ---------- отзывы ---------- */
+  .quotes{ background:var(--paper-2); border-block:1px solid var(--rule); }
+  .quote-grid{
+    display:grid; grid-template-columns:repeat(3,1fr);
+    gap:1px; background:var(--rule); border-block:1px solid var(--rule);
+  }
+  @media (max-width:880px){ .quote-grid{ grid-template-columns:1fr; } }
+  .quote{
+    background:var(--paper-2); padding:clamp(24px,2.6vw,36px);
+    display:flex; flex-direction:column; gap:20px;
+  }
+  .quote p{ font-size:clamp(16px,1.7vw,19px); font-weight:500; letter-spacing:-0.015em; line-height:1.45; }
+  .quote footer{ margin-top:auto; padding-top:8px; }
+  .quote footer b{ display:block; font-size:14px; font-weight:700; }
+  .quote footer span{ font-size:13px; color:var(--ink-3); }
+
+  /* ---------- FAQ ---------- */
+  .faq{ max-width:880px; }
+  .faq details{ border-bottom:1px solid var(--rule); }
+  .faq details:first-of-type{ border-top:1px solid var(--rule); }
+  .faq summary{
+    cursor:pointer; list-style:none;
+    padding-block:22px;
+    display:flex; justify-content:space-between; align-items:center; gap:20px;
+    font-size:clamp(16px,1.9vw,20px); font-weight:700; letter-spacing:-0.02em;
+  }
+  .faq summary::-webkit-details-marker{ display:none; }
+  .faq summary i{ color:var(--grn); font-size:22px; flex:none; transition:transform .25s var(--ease); }
+  .faq details[open] summary i{ transform:rotate(45deg); }
+  .faq details p{ padding-bottom:24px; color:var(--ink-2); font-size:15.5px; max-width:66ch; }
+  @media (prefers-reduced-motion: reduce){ .faq summary i{ transition:none; } }
+
+  /* ---------- контакты ---------- */
+  .contact{ background:var(--paper-2); border-top:1px solid var(--rule); }
+  .contact-grid{
+    display:grid; grid-template-columns:1.1fr 0.9fr;
+    gap:clamp(28px,4vw,64px); align-items:start;
+  }
+  @media (max-width:900px){ .contact-grid{ grid-template-columns:1fr; } }
+
+  .field{ display:flex; flex-direction:column; gap:8px; margin-bottom:20px; }
+  .field label{ font-size:13.5px; font-weight:700; color:var(--ink-2); }
+  .field input, .field textarea{
+    font:inherit; font-size:15.5px; padding:14px 15px;
+    border:1.5px solid var(--rule-2); border-radius:var(--r);
+    background:var(--paper); color:var(--ink); resize:vertical;
+  }
+  .field input::placeholder, .field textarea::placeholder{ color:var(--ink-3); }
+  .field input:focus, .field textarea:focus{ border-color:var(--ink); outline-offset:1px; }
+  .field .hint{ font-size:12.5px; color:var(--ink-3); }
+  .field.invalid input, .field.invalid textarea{ border-color:var(--hi-deep); }
+  .field .err{ font-size:12.5px; font-weight:600; color:var(--hi-deep); display:none; gap:6px; align-items:center; }
+  .field.invalid .err{ display:flex; }
+
+  .consent{ font-size:12.5px; color:var(--ink-3); margin-top:14px; max-width:48ch; }
+  .form-state{
+    display:none; margin-top:18px; padding:14px 16px;
+    border-left:3px solid var(--hi); background:var(--hi-wash);
+    font-size:14px; font-weight:600; color:var(--ink);
+  }
+  .form-state.on{ display:block; }
+  .btn[aria-busy="true"]{ opacity:.7; pointer-events:none; }
+
+  .contact-facts li{
+    display:flex; gap:14px; align-items:flex-start;
+    padding-block:18px; border-bottom:1px solid var(--rule);
+  }
+  .contact-facts li:first-child{ border-top:1px solid var(--rule); }
+  .contact-facts i{ font-size:20px; color:var(--grn); margin-top:2px; flex:none; }
+  .contact-facts b{ display:block; font-size:13px; color:var(--ink-3); font-weight:600; margin-bottom:2px; }
+  .contact-facts span{ font-size:15.5px; font-weight:600; }
+
+  /* ---------- подвал ---------- */
+  footer.site{ background:var(--paper); border-top:1px solid var(--rule); padding-block:clamp(40px,5vw,64px) 28px; }
+  .foot-grid{ display:grid; grid-template-columns:1.6fr 1fr 1fr; gap:clamp(24px,3vw,44px); padding-bottom:32px; }
+  @media (max-width:760px){ .foot-grid{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:520px){ .foot-grid{ grid-template-columns:1fr; } }
+  .foot-grid h4{ font-size:13px; font-weight:700; color:var(--ink-3); margin-bottom:14px; }
+  .foot-grid li{ margin-bottom:10px; }
+  .foot-grid a{ font-size:14.5px; color:var(--ink-2); }
+  .foot-grid a:hover{ color:var(--hi); }
+  .foot-bottom{
+    border-top:1px solid var(--rule); padding-top:20px;
+    display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between;
+    font-size:13px; color:var(--ink-3);
+  }
+
+  .proto-flag{
+    position:fixed; left:0; bottom:0; z-index:60;
+    background:var(--ink); color:var(--paper);
+    font-size:11.5px; font-weight:700; padding:8px 13px;
+    pointer-events:none;
+  }
+
+  .mobile-bar{
+    display:none; position:fixed; left:0; right:0; bottom:0; z-index:70;
+    gap:1px; background:var(--rule); border-top:1px solid var(--rule);
+  }
+  .mobile-bar .btn{ flex:1; border-radius:0; }
+  @media (max-width:700px){
+    .mobile-bar{ display:flex; }
+    body{ padding-bottom:64px; }
+    .proto-flag{ bottom:calc(64px + env(safe-area-inset-bottom,0px)); }
+    #contact{ scroll-margin-bottom:80px; }
+  }
+
+  /* ---------- базовые состояния до запуска хореографии ---------- */
+  .js .anim-line > span,
+  .js .anim-up{ opacity:0; }
+
+  /* Аварийное раскрытие: скрипт не приехал или упал. Показываем всё как есть. */
+  .no-motion .anim-line > span,
+  .no-motion .anim-up{ opacity:1 !important; transform:none !important; }
+  .no-motion .progress{ display:none; }
+
+  /* Мягкий режим для prefers-reduced-motion.
+     Движение убрано, но проявление остаётся: оно помогает понять структуру.
+     Уменьшенная анимация значит мягче, а не ноль. */
+  .soft .anim-line > span,
+  .soft .anim-up{ transform:none !important; transition:opacity 260ms ease; }
+  .soft .anim-line > span.shown,
+  .soft .anim-up.shown{ opacity:1; }
+  .soft .progress{ display:none; }
+</style>
+
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<!-- ============================================================
+     СЦЕНА. Разбирается по прокрутке. Без скриптов и при отключённом
+     движении остаётся целым деревом: это корректное статичное состояние.
+     ============================================================ -->
+<div class="stage" id="stage" aria-hidden="true">
+  <svg viewBox="0 0 600 900" xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false">
+
+    <!-- ---------- земля: остаётся всегда ---------- -->
+    <g id="lawn">
+      <path class="lawn" d="M40,862 H560"/>
+    </g>
+
+    <!-- ---------- крона: ярусы снимаются сверху вниз, парами ---------- -->
+    <g id="crown">
+      <g class="branch" data-ox="287.1" data-oy="150.0">
+        <image class="layer" href="assets/layers/crown-1L.webp"
+               x="127.7" y="31.6" width="158.2" height="237.9"/>
+      </g>
+      <g class="branch" data-ox="310.0" data-oy="148.2">
+        <image class="layer" href="assets/layers/crown-1R.webp"
+               x="311.1" y="29.3" width="151.8" height="242.6"/>
+      </g>
+      <g class="branch" data-ox="287.7" data-oy="342.8">
+        <image class="layer" href="assets/layers/crown-2L.webp"
+               x="86.7" y="278.9" width="199.8" height="138.3"/>
+      </g>
+      <g class="branch" data-ox="311.1" data-oy="345.7">
+        <image class="layer" href="assets/layers/crown-2R.webp"
+               x="312.3" y="281.8" width="196.9" height="135.4"/>
+      </g>
+      <g class="branch" data-ox="284.8" data-oy="498.6">
+        <image class="layer" href="assets/layers/crown-3L.webp"
+               x="60.4" y="433.6" width="223.2" height="134.8"/>
+      </g>
+      <g class="branch" data-ox="314.6" data-oy="500.4">
+        <image class="layer" href="assets/layers/crown-3R.webp"
+               x="315.8" y="433.6" width="216.8" height="141.8"/>
+      </g>
+      <g class="branch" data-ox="281.2" data-oy="642.2">
+        <image class="layer" href="assets/layers/crown-4L.webp"
+               x="51.0" y="584.8" width="229.1" height="115.4"/>
+      </g>
+      <g class="branch" data-ox="318.8" data-oy="646.9">
+        <image class="layer" href="assets/layers/crown-4R.webp"
+               x="319.9" y="594.7" width="228.5" height="105.5"/>
+      </g>
+    </g>
+
+    <!-- ---------- ствол: секции снимаются сверху вниз.
+         Каждая секция заходит на нижнюю на 5 px исходника: встык
+         на дробных координатах между ними проступала светлая щель. ---------- -->
+    <g id="trunk">
+      <image class="layer trunk-part" data-order="5" href="assets/layers/trunk-5.webp"
+             x="285.9" y="26.4" width="25.2" height="249.6"/>
+      <image class="layer trunk-part" data-order="4" href="assets/layers/trunk-4.webp"
+             x="286.5" y="273.0" width="25.8" height="147.1"/>
+      <image class="layer trunk-part" data-order="3" href="assets/layers/trunk-3.webp"
+             x="283.6" y="417.2" width="32.2" height="161.1"/>
+      <image class="layer trunk-part" data-order="2" href="assets/layers/trunk-2.webp"
+             x="280.1" y="575.4" width="39.8" height="127.7"/>
+      <image class="layer trunk-part" data-order="1" href="assets/layers/trunk-1.webp"
+             x="104.9" y="700.2" width="390.8" height="162.3"/>
+    </g>
+
+    <!-- Верёвка единичной длины: позиция и натяжение задаются только
+         трансформом, геометрия не пересчитывается ни на одном кадре. -->
+    <line class="rope" id="rope" x1="0" y1="0" x2="0" y2="1"
+          vector-effect="non-scaling-stroke"
+          transform="translate(300,26) scale(1,600)"/>
+
+    <!-- Арборист ростом 110 при дереве в 836: масштаб взят от человека
+         против взрослого дерева, а не от размера генерации. -->
+    <g id="crew" transform="translate(300, 862)">
+      <image href="assets/arborist.webp" x="-34.2" y="-110.0" width="72.7" height="110.0"/>
+    </g>
+  </svg>
+</div>
+
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="#top">Крона<em>.</em>Про</a>
+    <nav class="nav-links" aria-label="Разделы сайта">
+      <a href="#services">Услуги</a>
+      <a href="#approach">Подход</a>
+      <a href="#process">Порядок работ</a>
+      <a href="#works">Объекты</a>
+      <a href="#faq">Вопросы</a>
+    </nav>
+    <div class="nav-right">
+      <a class="nav-tel" href="tel:+78142000000">+7 8142 00-00-00</a>
+      <a class="btn btn-primary" href="#contact">Оставить заявку</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ===== ГЕРОЙ ===== -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <h1 class="anim-line">
+          <span class="line"><span>Спиливаем аварийные деревья</span></span>
+          <span class="line"><span>там, где <b>не пройдёт техника</b></span></span>
+        </h1>
+        <p class="lede anim-up">Промышленный альпинизм и арбористика в Петрозаводске. Работаем по договору, с актом и страхованием ответственности.</p>
+        <div class="hero-actions anim-up">
+          <a class="btn btn-primary" href="#contact">Оставить заявку</a>
+          <a class="btn btn-secondary" href="#works">Смотреть объекты</a>
+        </div>
+      </div>
+
+      <!-- Правая колонка намеренно пуста: её занимает сцена с деревом. -->
+    </div>
+  </section>
+
+  <!-- ===== ФАКТЫ =====
+       ВНИМАНИЕ: «10 лет» и «500+» перенесены из прототипа v1 и заказчиком
+       не подтверждены (см. PRODUCT.md, Evidence on Hand). -->
+  <div class="facts">
+    <div class="wrap facts-grid">
+      <div class="fact anim-up"><b data-count="10" data-suffix=" лет">10 лет</b><span>работаем в Петрозаводске и Карелии</span></div>
+      <div class="fact anim-up"><b data-count="500" data-suffix="+">500+</b><span>завершённых объектов</span></div>
+      <div class="fact anim-up"><b>Договор</b><span>на каждый объект, без исключений</span></div>
+      <div class="fact anim-up"><b>Страховка</b><span>гражданская ответственность на объекте</span></div>
+    </div>
+  </div>
+
+  <!-- ===== УСЛУГИ ===== -->
+  <section id="services">
+    <div class="wrap">
+      <div class="head">
+        <h2 class="anim-line"><span class="line"><span>Всё, что требует высоты и точности</span></span></h2>
+        <p class="lede anim-up">От аварийного сноса до фасадных работ. Закрываем высотные задачи без автовышки, там, где обычная техника не проедет.</p>
+      </div>
+
+      <div class="clusters">
+        <div class="cluster lead anim-up">
+          <div class="cluster-top"><i class="ph ph-tree" aria-hidden="true"></i><h3>Деревья</h3></div>
+          <p>Основное направление. Демонтаж по частям в стеснённых условиях, рядом с домами, линиями электропередач и коммуникациями.</p>
+          <ul>
+            <li><i class="ph ph-arrow-right" aria-hidden="true"></i><span>Снос аварийных и сухостойных деревьев</span></li>
+            <li><i class="ph ph-arrow-right" aria-hidden="true"></i><span>Формовочная и санитарная обрезка</span></li>
+            <li><i class="ph ph-arrow-right" aria-hidden="true"></i><span>Кронирование и снижение высоты</span></li>
+            <li><i class="ph ph-arrow-right" aria-hidden="true"></i><span>Вывоз и утилизация древесины</span></li>
+          </ul>
+        </div>
+
+        <div class="cluster anim-up">
+          <div class="cluster-top"><i class="ph ph-buildings" aria-hidden="true"></i><h3>Кровли и фасады</h3></div>
+          <p>Сезонные и монтажные работы на высоте, без повреждения покрытия и водостоков.</p>
+          <ul>
+            <li><i class="ph ph-arrow-right" aria-hidden="true"></i><span>Очистка крыш от снега и наледи</span></li>
+            <li><i class="ph ph-arrow-right" aria-hidden="true"></i><span>Монтаж антиобледенительных систем</span></li>
+            <li><i class="ph ph-arrow-right" aria-hidden="true"></i><span>Окраска и ремонт фасадов</span></li>
+            <li><i class="ph ph-arrow-right" aria-hidden="true"></i><span>Монтаж вывесок и конструкций</span></li>
+          </ul>
+        </div>
+
+        <div class="cluster anim-up">
+          <div class="cluster-top"><i class="ph ph-clipboard-text" aria-hidden="true"></i><h3>Экспертиза</h3></div>
+          <p>Документы для управляющих компаний, ТСЖ и застройщиков.</p>
+          <ul>
+            <li><i class="ph ph-arrow-right" aria-hidden="true"></i><span>Диагностика состояния насаждений</span></li>
+            <li><i class="ph ph-arrow-right" aria-hidden="true"></i><span>Заключение арбориста</span></li>
+            <li><i class="ph ph-arrow-right" aria-hidden="true"></i><span>Оценка рисков по участку</span></li>
+            <li><i class="ph ph-arrow-right" aria-hidden="true"></i><span>Консультация перед сметой</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="note-row anim-up">
+        <p>Нужной услуги нет в списке? Опишите объект, арборист перезвонит и предложит решение.</p>
+        <a class="btn btn-secondary" href="#contact">Оставить заявку</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ПОДХОД: липкий заголовок ===== -->
+  <section id="approach" class="approach">
+    <div class="wrap approach-grid">
+      <div class="approach-title">
+        <h2 class="anim-line"><span class="line"><span>Подрядчик,</span></span><span class="line"><span>а не бригада</span></span><span class="line"><span>по звонку</span></span></h2>
+        <p class="lede anim-up">Для управляющей компании результат работы — не только спиленное дерево, но и пакет документов, которым можно закрыть вопрос перед собственниками.</p>
+      </div>
+
+      <div>
+        <div class="register">
+          <h3 class="anim-up">На высоте</h3>
+          <ul>
+            <li class="anim-up"><b>01</b><span>Аттестованные специалисты по промышленному альпинизму<em>Квалификация подтверждается удостоверениями</em></span></li>
+            <li class="anim-up"><b>02</b><span>Страховочные системы международного стандарта<em>Снаряжение проходит регулярную проверку</em></span></li>
+            <li class="anim-up"><b>03</b><span>Опыт на сложных объектах Карелии<em>Стеснённые дворы, склоны, близость к коммуникациям</em></span></li>
+            <li class="anim-up"><b>04</b><span>Охрана труда на каждом этапе работ<em>Зона работ огораживается, доступ контролируется</em></span></li>
+          </ul>
+        </div>
+
+        <div class="register">
+          <h3 class="anim-up">За столом</h3>
+          <ul>
+            <li class="anim-up"><b>01</b><span>Договор и техническое задание на любой объём<em>До начала работ, а не задним числом</em></span></li>
+            <li class="anim-up"><b>02</b><span>Прозрачная смета без доплат по ходу дела<em>Стоимость фиксируется письменно</em></span></li>
+            <li class="anim-up"><b>03</b><span>Официальный акт выполненных работ и чек<em>Подходит для отчётности перед собственниками</em></span></li>
+            <li class="anim-up"><b>04</b><span>Страхование гражданской ответственности<em>Риск повреждения имущества закрыт полисом</em></span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ПОРЯДОК РАБОТ: горизонтальная панорама =====
+       Горизонталь выбрана не для эффекта: пять этапов идут строго
+       последовательно, и движение слева направо повторяет их порядок. -->
+  <section id="process" class="pan" aria-label="Порядок работ">
+    <div class="pan-track" id="panTrack">
+      <div class="pan-intro">
+        <h2>От заявки до подписанного акта</h2>
+        <p class="lede">Пять этапов. Каждый заканчивается документом или результатом, который можно проверить.</p>
+      </div>
+      <div class="pan-step"><b>01</b><h3>Заявка</h3><p>Звонок или форма на сайте. Уточняем задачу и адрес объекта.</p></div>
+      <div class="pan-step"><b>02</b><h3>Выезд и оценка</h3><p>Арборист осматривает объект, оценивает сложность и риски.</p></div>
+      <div class="pan-step"><b>03</b><h3>Смета и договор</h3><p>Фиксируем стоимость, сроки и объём работ письменно.</p></div>
+      <div class="pan-step"><b>04</b><h3>Работы</h3><p>Бригада промышленных альпинистов выполняет работы по плану.</p></div>
+      <div class="pan-step"><b>05</b><h3>Уборка и акт</h3><p>Убираем территорию, подписываем акт, передаём документы.</p></div>
+      <div class="pan-tail" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <!-- ===== ОБЪЕКТЫ ===== -->
+  <section id="works">
+    <div class="wrap">
+      <div class="head">
+        <h2 class="anim-line"><span class="line"><span>Объекты в Петрозаводске</span></span><span class="line"><span>и районах Карелии</span></span></h2>
+      </div>
+
+      <div class="compare anim-up" id="compareBox">
+        <div class="compare-side after"><span class="compare-tag">ПОСЛЕ</span></div>
+        <div class="compare-side before"><span class="compare-tag">ДО</span></div>
+        <div class="compare-grip" aria-hidden="true"><i class="ph ph-arrows-horizontal"></i></div>
+        <input type="range" min="0" max="100" value="52"
+               aria-label="Сравнение объекта до и после работ. Двигайте ползунок."
+               oninput="this.closest('.compare').style.setProperty('--pos', this.value + '%')">
+      </div>
+
+      <!-- TODO: пары фото до/после, 1600x900, один ракурс и одна точка съёмки. -->
+      <div class="works">
+        <article class="work anim-up">
+          <div class="shot" role="img" aria-label="Место для фотографии объекта: демонтаж аварийной сосны">
+            <div class="shot-layer" data-parallax="9" aria-hidden="true"></div>
+            <span>Фото объекта 1200&times;900</span>
+          </div>
+          <h3>Демонтаж аварийной сосны у дома</h3>
+          <p>Петрозаводск, улица Ключевая</p>
+        </article>
+        <article class="work anim-up">
+          <div class="shot" role="img" aria-label="Место для фотографии объекта: снижение высоты тополей">
+            <div class="shot-layer" data-parallax="9" aria-hidden="true"></div>
+            <span>Фото объекта 1200&times;900</span>
+          </div>
+          <h3>Снижение высоты тополей вдоль дороги</h3>
+          <p>Петрозаводск, Октябрьский проспект</p>
+        </article>
+        <article class="work anim-up">
+          <div class="shot" role="img" aria-label="Место для фотографии объекта: уборка наледи с кровли">
+            <div class="shot-layer" data-parallax="9" aria-hidden="true"></div>
+            <span>Фото объекта 1200&times;900</span>
+          </div>
+          <h3>Уборка наледи с кровли торгового центра</h3>
+          <p>Петрозаводск, центр города</p>
+        </article>
+        <article class="work anim-up">
+          <div class="shot" role="img" aria-label="Место для фотографии объекта: санитарная обрезка аллеи">
+            <div class="shot-layer" data-parallax="9" aria-hidden="true"></div>
+            <span>Фото объекта 1200&times;900</span>
+          </div>
+          <h3>Санитарная обрезка парковой аллеи</h3>
+          <p>Петрозаводск, набережная</p>
+        </article>
+        <article class="work anim-up">
+          <div class="shot" role="img" aria-label="Место для фотографии объекта: монтаж антиобледенительной системы">
+            <div class="shot-layer" data-parallax="9" aria-hidden="true"></div>
+            <span>Фото объекта 1200&times;900</span>
+          </div>
+          <h3>Монтаж антиобледенительной системы</h3>
+          <p>Кондопога</p>
+        </article>
+        <article class="work anim-up">
+          <div class="shot" role="img" aria-label="Место для фотографии объекта: обследование насаждений">
+            <div class="shot-layer" data-parallax="9" aria-hidden="true"></div>
+            <span>Фото объекта 1200&times;900</span>
+          </div>
+          <h3>Обследование насаждений для управляющей компании</h3>
+          <p>Петрозаводск, жилой комплекс</p>
+        </article>
+      </div>
+
+      <p class="disclaimer">Раздел показан на пустых слотах. Названия объектов и адреса взяты из прототипа как пример структуры. В рабочей версии здесь будут фотографии реальных работ с подтверждёнными адресами.</p>
+    </div>
+  </section>
+
+  <!-- ===== ОТЗЫВЫ ===== -->
+  <section id="testimonials" class="quotes">
+    <div class="wrap head">
+      <h2 class="anim-line"><span class="line"><span>Что говорят заказчики</span></span></h2>
+    </div>
+    <div class="wrap">
+      <div class="quote-grid">
+        <blockquote class="quote anim-up">
+          <p>Приехали в день обращения, сразу составили смету и договор. Участок убрали идеально.</p>
+          <footer><b>Управляющая компания</b><span>Петрозаводск</span></footer>
+        </blockquote>
+        <blockquote class="quote anim-up">
+          <p>Аварийная ель стояла между гаражами, техника бы не проехала. Справились за полдня.</p>
+          <footer><b>Частный дом</b><span>посёлок Матросы</span></footer>
+        </blockquote>
+        <blockquote class="quote anim-up">
+          <p>Работают по договору и выдают акт. Для отчётности перед собственниками это решающий момент.</p>
+          <footer><b>ТСЖ</b><span>Петрозаводск</span></footer>
+        </blockquote>
+      </div>
+      <p class="disclaimer">Тексты отзывов взяты из прототипа как пример формата. Публикуем только после получения реальных отзывов и согласия авторов.</p>
+    </div>
+  </section>
+
+  <!-- ===== ВОПРОСЫ ===== -->
+  <section id="faq">
+    <div class="wrap">
+      <div class="head">
+        <h2 class="anim-line"><span class="line"><span>Частые вопросы</span></span></h2>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>Сколько стоят работы?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>Стоимость зависит от высоты, доступа к объекту и объёма работ. После бесплатного выезда и оценки называем точную сумму и фиксируем её в смете до начала работ.</p>
+        </details>
+        <details>
+          <summary>Работаете без специальной техники?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>Да, это основная специализация. Верхолазные работы там, куда не проедет автовышка: между домами, во дворах, на склонах и в стеснённых условиях.</p>
+        </details>
+        <details>
+          <summary>Какие документы выдаёте?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>На каждый объект оформляем договор, смету, акт выполненных работ и чек. Пакет подходит для отчётности управляющей компании или ТСЖ.</p>
+        </details>
+        <details>
+          <summary>Как быстро можете приехать?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>Выезд специалиста для оценки объекта обычно возможен в течение одного-двух дней после заявки. Аварийные случаи берём в приоритет.</p>
+        </details>
+        <details>
+          <summary>Работаете только в Петрозаводске?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>Основной регион — Петрозаводск и пригороды. По Карелии выезжаем в зависимости от объёма и сложности объекта.</p>
+        </details>
+        <details>
+          <summary>Есть ли страхование ответственности?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>Да, работы на объекте застрахованы. Это часть обязательного пакета документов на каждый заказ.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== КОНТАКТЫ ===== -->
+  <section id="contact" class="contact">
+    <div class="wrap">
+      <div class="head">
+        <h2 class="anim-line"><span class="line"><span>Обсудим ваш объект</span></span></h2>
+        <p class="lede anim-up">Убираем территорию полностью: ни веток, ни опилок. Оставьте заявку, перезвоним и предложим дату выезда специалиста.</p>
+      </div>
+
+      <div class="contact-grid">
+        <form id="leadForm" novalidate>
+          <div class="field" id="f-name">
+            <label for="name">Имя</label>
+            <input id="name" name="name" type="text" autocomplete="name" placeholder="Как к вам обращаться" required>
+            <p class="err"><i class="ph ph-warning-circle" aria-hidden="true"></i>Укажите имя, чтобы мы знали, к кому обращаться.</p>
+          </div>
+
+          <div class="field" id="f-tel">
+            <label for="tel">Телефон</label>
+            <input id="tel" name="tel" type="tel" autocomplete="tel" inputmode="tel" placeholder="+7 900 000-00-00" required>
+            <p class="hint">Перезвоним в рабочее время.</p>
+            <p class="err"><i class="ph ph-warning-circle" aria-hidden="true"></i>Нужен номер минимум из 10 цифр.</p>
+          </div>
+
+          <div class="field" id="f-msg">
+            <label for="msg">Об объекте</label>
+            <textarea id="msg" name="msg" rows="4" placeholder="Что за объект, что нужно сделать, есть ли подъезд для техники"></textarea>
+            <p class="hint">Чем конкретнее описание, тем точнее предварительная оценка.</p>
+          </div>
+
+          <button class="btn btn-primary" type="submit" id="submitBtn" style="width:100%;">Отправить заявку</button>
+          <p class="consent">Нажимая кнопку, вы соглашаетесь на обработку персональных данных.</p>
+          <p class="form-state" id="formState" role="status" aria-live="polite"></p>
+        </form>
+
+        <ul class="contact-facts">
+          <li><i class="ph ph-phone" aria-hidden="true"></i><div><b>Телефон</b><span>+7 8142 00-00-00</span></div></li>
+          <li><i class="ph ph-envelope-simple" aria-hidden="true"></i><div><b>Почта</b><span>info@krona.pro</span></div></li>
+          <li><i class="ph ph-map-pin" aria-hidden="true"></i><div><b>Зона работы</b><span>Петрозаводск и Карелия</span></div></li>
+          <li><i class="ph ph-clock" aria-hidden="true"></i><div><b>Часы работы</b><span>С понедельника по субботу, с 8:00 до 20:00</span></div></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="#top" style="margin-bottom:14px;">Крона<em>.</em>Про</a>
+        <p style="font-size:14px;color:var(--ink-2);max-width:36ch;margin-top:12px;">
+          Промышленный альпинизм и арбористика в Петрозаводске. Высотные работы любой сложности, по договору и с гарантией.
+        </p>
+      </div>
+      <div>
+        <h4>Разделы</h4>
+        <ul>
+          <li><a href="#services">Услуги</a></li>
+          <li><a href="#approach">Подход</a></li>
+          <li><a href="#process">Порядок работ</a></li>
+          <li><a href="#works">Объекты</a></li>
+          <li><a href="#faq">Вопросы</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Контакты</h4>
+        <ul>
+          <li><a href="tel:+78142000000">+7 8142 00-00-00</a></li>
+          <li><a href="mailto:info@krona.pro">info@krona.pro</a></li>
+          <li><a href="#contact">Петрозаводск, Республика Карелия</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>&copy; 2026 Крона.Про</span>
+      <span>Промышленный альпинизм и арбористика</span>
+    </div>
+  </div>
+</footer>
+
+<span class="proto-flag">Прототип v5 · оценивается дизайн. Цифры, адреса объектов и контакты — примеры, не факты.</span>
+
+<div class="mobile-bar">
+  <a class="btn btn-secondary" href="tel:+78142000000" style="background:var(--paper-2);">Позвонить</a>
+  <a class="btn btn-primary" href="#contact">Оставить заявку</a>
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Крона.Про",
+  "description": "Промышленный альпинизм и арбористика в Петрозаводске: снос аварийных деревьев, обрезка и кронирование, высотные работы без спецтехники.",
+  "areaServed": "Петрозаводск, Республика Карелия",
+  "telephone": "+7-8142-00-00-00",
+  "email": "info@krona.pro",
+  "priceRange": "по смете"
+}
+</script>
+
+<!-- Скрываем анимируемое до отрисовки, чтобы не мигало.
+     Но контент не должен зависеть от чужого CDN: если библиотека не приехала
+     за 700 мс, показываем страницу без анимации. Пустой первый экран
+     в ожидании скрипта хуже, чем страница без движения. -->
+<script>
+(function(){
+  var root = document.documentElement;
+  root.classList.add('js');
+  window.__revealGuard = window.setTimeout(function(){
+    root.classList.add('no-motion');
+    window.__revealGuard = null;
+  }, 700);
+  window.__gsapFailed = function(){
+    if (window.__revealGuard){ window.clearTimeout(window.__revealGuard); window.__revealGuard = null; }
+    root.classList.add('no-motion');
+  };
+})();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" onerror="window.__gsapFailed()"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" onerror="window.__gsapFailed()"></script>
+
+<script>
+(function(){
+  'use strict';
+
+  var root      = document.documentElement;
+  var reduceMQ  = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var hasGSAP   = typeof window.gsap !== 'undefined' && typeof window.ScrollTrigger !== 'undefined';
+
+  /* ---------- форма: работает всегда, до и независимо от анимации ---------- */
+  (function form(){
+    var form  = document.getElementById('leadForm');
+    var state = document.getElementById('formState');
+    var btn   = document.getElementById('submitBtn');
+    if (!form) return;
+
+    function digits(v){ return (v || '').replace(/\D/g, ''); }
+
+    function setInvalid(id, bad){
+      var f = document.getElementById(id);
+      if (!f) return;
+      f.classList.toggle('invalid', bad);
+      var input = f.querySelector('input, textarea');
+      if (input) input.setAttribute('aria-invalid', bad ? 'true' : 'false');
+    }
+
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var nameEl = document.getElementById('name');
+      var telEl  = document.getElementById('tel');
+      var nameBad = nameEl.value.trim().length < 2;
+      var telBad  = digits(telEl.value).length < 10;
+
+      setInvalid('f-name', nameBad);
+      setInvalid('f-tel',  telBad);
+
+      if (nameBad || telBad){
+        state.classList.remove('on');
+        (nameBad ? nameEl : telEl).focus();
+        return;
+      }
+
+      btn.setAttribute('aria-busy','true');
+      btn.textContent = 'Отправляем';
+
+      /* Реальный обработчик появится, когда заказчик выберет приёмник
+         заявок: почта, Telegram или CRM. */
+      window.setTimeout(function(){
+        btn.removeAttribute('aria-busy');
+        btn.textContent = 'Отправить заявку';
+        form.reset();
+        state.textContent = 'Заявка принята. Свяжемся в ближайшее рабочее время. Это прототип: форма пока никуда не отправляет данные.';
+        state.classList.add('on');
+      }, reduceMQ.matches ? 0 : 600);
+    });
+
+    ['name','tel'].forEach(function(id){
+      var el = document.getElementById(id);
+      if (el) el.addEventListener('input', function(){ setInvalid('f-' + id, false); });
+    });
+  })();
+
+  /* ---------- аварийное состояние: без анимации вообще ---------- */
+  function fallbackStatic(){
+    root.classList.remove('soft');
+    root.classList.add('no-motion');
+    var pan = document.querySelector('.pan');
+    if (pan) pan.classList.add('static');
+  }
+
+  /* ---------- мягкий режим: только проявление, без перемещений ----------
+     Уменьшенная анимация значит мягче, а не ноль: фейд помогает понять,
+     что раздел появился, и при этом ничего не движется. */
+  function softMotion(){
+    root.classList.add('soft');
+    var pan = document.querySelector('.pan');
+    if (pan) pan.classList.add('static');
+
+    var targets = document.querySelectorAll('.anim-up, .anim-line > .line > span');
+    if (!('IntersectionObserver' in window)){
+      Array.prototype.forEach.call(targets, function(el){ el.classList.add('shown'); });
+      return;
+    }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('shown');
+        io.unobserve(entry.target);
+      });
+    }, { threshold: 0.12 });
+    Array.prototype.forEach.call(targets, function(el){ io.observe(el); });
+  }
+
+  /* Гард снимаем только когда точно знаем, что делать дальше. */
+  if (window.__revealGuard){
+    window.clearTimeout(window.__revealGuard);
+    window.__revealGuard = null;
+  }
+
+  /* Гард мог успеть сработать на медленной сети. Тогда страница уже
+     раскрыта без анимации, и перезапускать хореографию нельзя:
+     контент моргнёт и уедет. */
+  if (root.classList.contains('no-motion')) return;
+
+  if (!hasGSAP){ fallbackStatic(); return; }
+
+  if (reduceMQ.matches){ softMotion(); return; }
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  var EASE = 'power3.out';
+
+  /* ---------- 1. Герой: построчный подъём из маски ----------
+     Задача: задать порядок чтения. Заголовок, затем пояснение, затем действия. */
+  var heroLines = document.querySelectorAll('.hero .anim-line > .line > span');
+  var heroRest  = document.querySelectorAll('.hero .anim-up');
+
+  gsap.set(heroLines, { yPercent: 110, opacity: 1 });
+  gsap.set(heroRest,  { y: 24, opacity: 0 });
+
+  var intro = gsap.timeline({ defaults: { ease: EASE } });
+  intro.to(heroLines, { yPercent: 0, duration: .9, stagger: .06 })
+       .to(heroRest,  { y: 0, opacity: 1, duration: .7, stagger: .06 }, '-=0.5');
+
+  /* ---------- 2. Заголовки разделов: тот же приём при входе в кадр ---------- */
+  gsap.utils.toArray('.anim-line').forEach(function(block){
+    if (block.closest('.hero')) return;
+    var spans = block.querySelectorAll('.line > span');
+    gsap.set(spans, { yPercent: 110, opacity: 1 });
+    ScrollTrigger.create({
+      trigger: block,
+      start: 'top 85%',
+      once: true,
+      onEnter: function(){
+        gsap.to(spans, { yPercent: 0, duration: .85, ease: EASE, stagger: .06 });
+      }
+    });
+  });
+
+  /* ---------- 3. Блоки: подъём с задержкой по группам ----------
+     Задача: иерархия. Элемент появляется тогда, когда до него дошли. */
+  gsap.utils.toArray('.anim-up').forEach(function(el){
+    if (el.closest('.hero')) return;
+    gsap.set(el, { y: 26, opacity: 0 });
+    ScrollTrigger.create({
+      trigger: el,
+      start: 'top 90%',
+      once: true,
+      onEnter: function(){
+        gsap.to(el, { y: 0, opacity: 1, duration: .7, ease: EASE });
+      }
+    });
+  });
+
+  /* ---------- 4. Счётчики ----------
+     Задача: удержать взгляд на доказательстве, а не на оформлении. */
+  gsap.utils.toArray('[data-count]').forEach(function(el){
+    var target = parseFloat(el.getAttribute('data-count'));
+    var suffix = el.getAttribute('data-suffix') || '';
+    var obj = { v: 0 };
+    ScrollTrigger.create({
+      trigger: el,
+      start: 'top 92%',
+      once: true,
+      onEnter: function(){
+        gsap.to(obj, {
+          v: target, duration: 1.4, ease: 'power2.out',
+          onUpdate: function(){ el.textContent = Math.round(obj.v) + suffix; },
+          onComplete: function(){ el.textContent = target + suffix; }
+        });
+      }
+    });
+  });
+
+  /* ---------- 5. Параллакс слоёв в слотах фото ----------
+     Задача: глубина. Кадр живёт при прокрутке, рамка стоит на месте. */
+  gsap.utils.toArray('[data-parallax]').forEach(function(layer){
+    var amount = parseFloat(layer.getAttribute('data-parallax')) || 10;
+    gsap.fromTo(layer,
+      { yPercent: -amount },
+      {
+        yPercent: amount, ease: 'none',
+        scrollTrigger: {
+          trigger: layer.parentElement,
+          start: 'top bottom', end: 'bottom top', scrub: true,
+          /* Композитный слой живёт только пока кадр на экране. */
+          onToggle: function(self){
+            layer.style.willChange = self.isActive ? 'transform' : 'auto';
+          }
+        }
+      }
+    );
+  });
+
+  /* ---------- 6. СЦЕНА: разбор дерева по прокрутке ----------
+     Одна шкала на всю страницу. Порядок работ настоящий:
+     подъём, крона сверху вниз, ствол секциями, пень, уборка.
+     Ничего не падает на землю: каждая часть снимается на верёвке
+     и уходит из кадра. В финале остаётся чистая лужайка. */
+  (function stage(){
+    var stageEl = document.getElementById('stage');
+    var crew    = document.getElementById('crew');
+    var rope    = document.getElementById('rope');
+    if (!stageEl || !crew || !rope) return;
+
+    var branches = gsap.utils.toArray('#crown .branch');
+    var parts    = gsap.utils.toArray('#trunk .trunk-part'); // сверху вниз: order 5..1
+
+    /* Геометрия взята из нарезки слоёв (assets/layers/meta.json),
+       пересчитана в координаты viewBox коэффициентом 600/1024. */
+    var AXIS   = 300;   // ось ствола
+    var GROUND = 862;   // подошва пня
+    var TOP    = 26;    // макушка ствола
+    var CREW_H = 110;   // рост арбориста в координатах сцены
+
+    /* линии реза ствола сверху вниз: после снятия секции верёвка
+       перевязывается ниже, на новый срез */
+    var CUTS = [273, 417, 575, 700];
+
+    /* позиция арбориста (точка — его подошвы) и точка крепления верёвки */
+    var pos    = { x: AXIS, y: GROUND };
+    var anchor = { y: TOP };
+
+    function apply(){
+      crew.setAttribute('transform', 'translate(' + pos.x.toFixed(1) + ',' + pos.y.toFixed(1) + ')');
+
+      /* Верёвка единичной длины и только растягивается: ни один кадр
+         не пересчитывает геометрию, работает тот же конвейер трансформов.
+         Тянется до макушки фигуры — там её подхватывает верёвка,
+         впечатанная в сам снимок арбориста. */
+      var top = anchor.y;
+      var len = Math.max(1, (pos.y - CREW_H) - top);
+      rope.setAttribute('transform',
+        'translate(' + pos.x.toFixed(1) + ',' + top.toFixed(1) + ') scale(1,' + len.toFixed(1) + ')');
+    }
+    apply();
+
+    var tl = gsap.timeline({
+      defaults: { ease: 'none' },
+      onUpdate: apply,
+      scrollTrigger: {
+        trigger: document.body,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 0.6,
+        invalidateOnRefresh: true
+      }
+    });
+
+    /* 0 – 8: подъём по стволу к верхнему ярусу.
+       Цель берётся от первой же ветви, а не задаётся числом. */
+    var firstPivot = parseFloat(branches[0].dataset.oy);
+    tl.to(pos, { y: firstPivot + CREW_H * 0.55, x: AXIS, duration: 8 }, 0);
+
+    /* 8 – 44: крона. Ярусы снимаются сверху вниз, парами лево/право.
+       Каждая ветвь поворачивается вокруг места примыкания к стволу —
+       точка взята при нарезке слоя, поэтому срез приходится туда,
+       где ветвь и правда растёт из ствола. */
+    branches.forEach(function(br, i){
+      var at = 8 + i * 4.4;
+      tl.to(br, {
+        opacity: 0,
+        y: 26,
+        /* левые ветви заваливаются влево, правые вправо: пила с одной
+           стороны, ветвь уходит от ствола, а не сквозь него */
+        rotation: (i % 2 === 0) ? -6 : 6,
+        duration: 3.8,
+        /* Скраб: easing искажает связь «прокрутил столько — увидел столько». */
+        ease: 'none',
+        svgOrigin: br.dataset.ox + ' ' + br.dataset.oy
+      }, at);
+
+      /* Арборист спускается вслед за фронтом работ: цель — следующая
+         по списку ветвь, у последней пары — первый срез ствола. */
+      var next = branches[i + 1];
+      var y = next ? parseFloat(next.dataset.oy) : CUTS[0];
+      tl.to(pos, { y: y + CREW_H * 0.55, duration: 4.4 }, at);
+    });
+
+    /* 44 – 76: ствол секциями сверху вниз, кроме пня.
+       После каждой секции верёвка перевязывается на новый срез. */
+    var topDown = parts.slice(0, 4); // order 5,4,3,2
+    topDown.forEach(function(part, i){
+      var at = 46 + i * 7.5;
+      tl.to(part, { opacity: 0, y: 16, duration: 6.5, ease: 'none' }, at);
+      tl.to(anchor, { y: CUTS[i], duration: 7.5 }, at);
+      /* подошвы держатся ниже среза, но не проваливаются под землю */
+      tl.to(pos, { y: Math.min(CUTS[i] + CREW_H * 0.75, GROUND), duration: 7.5 }, at);
+    });
+
+    /* 76 – 90: пень. Арборист уже на земле, отходит от ствола. */
+    tl.to(pos,    { y: GROUND, x: AXIS + 62, duration: 6 }, 76);
+    tl.to(rope,   { opacity: 0, duration: 4 }, 76);
+    tl.to(parts[4], { opacity: 0, duration: 7, ease: 'none' }, 80);
+
+    /* 90 – 100: бригада уходит, остаётся чистая земля */
+    tl.to(crew, { opacity: 0, x: 40, duration: 8, ease: 'none' }, 90);
+  })();
+
+  /* ---------- 7. Прогресс чтения ---------- */
+  var bar = document.getElementById('progress');
+  if (bar){
+    gsap.to(bar, {
+      scaleX: 1, ease: 'none',
+      scrollTrigger: { trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: .3 }
+    });
+  }
+
+  /* Магнитные кнопки удалены: инлайн-трансформ перекрывал :active и глушил
+     отклик на нажатие у главных CTA. Обратная связь важнее украшения. */
+
+  /* ---------- 8. Горизонтальная панорама процесса ----------
+     Задача: повторить линейность этапов направлением движения.
+     На узких экранах превращается в обычную ленту со снапом:
+     закрепление на телефоне мешает прокрутке. */
+  ScrollTrigger.matchMedia({
+    '(min-width: 901px)': function(){
+      var wrap  = document.querySelector('.pan');
+      var track = document.getElementById('panTrack');
+      if (!wrap || !track) return;
+
+      wrap.classList.remove('static');
+
+      var tween = gsap.to(track, {
+        x: function(){ return -(track.scrollWidth - window.innerWidth); },
+        ease: 'none',
+        scrollTrigger: {
+          trigger: wrap,
+          start: 'top top',
+          end: function(){ return '+=' + (track.scrollWidth - window.innerWidth); },
+          pin: true,
+          scrub: 1,
+          invalidateOnRefresh: true
+        }
+      });
+
+      /* Цифры этапов подъезжают, пока панорама идёт мимо. */
+      gsap.utils.toArray('.pan-step').forEach(function(step){
+        gsap.from(step.querySelectorAll('b, h3, p'), {
+          y: 30, opacity: 0, duration: .6, ease: EASE, stagger: .06,
+          scrollTrigger: { trigger: step, containerAnimation: tween, start: 'left 78%', once: true }
+        });
+      });
+
+      return function(){ gsap.set(track, { clearProps: 'transform' }); };
+    },
+
+    '(max-width: 900px)': function(){
+      var wrap = document.querySelector('.pan');
+      if (wrap) wrap.classList.add('static');
+      gsap.set('.pan-step b, .pan-step h3, .pan-step p', { clearProps: 'all' });
+    }
+  });
+
+  /* ---------- реакция на смену системной настройки движения ----------
+     Без перезагрузки: она выбросила бы пользователя из позиции прокрутки
+     и стёрла бы уже введённое в форму. Гасим хореографию на месте. */
+  reduceMQ.addEventListener('change', function(e){
+    if (!e.matches) return;
+
+    ScrollTrigger.getAll().forEach(function(t){ t.kill(true); });
+    gsap.globalTimeline.clear();
+
+    gsap.set('.anim-up, .anim-line > .line > span, .shot-layer, .pan-track, #progress', { clearProps: 'all' });
+    gsap.set('.pan-step b, .pan-step h3, .pan-step p', { clearProps: 'all' });
+    gsap.set('#crown .branch, #trunk .trunk-part, #crew, #rope', { clearProps: 'all' });
+
+    document.querySelectorAll('[data-parallax]').forEach(function(l){ l.style.willChange = 'auto'; });
+    document.querySelectorAll('[data-count]').forEach(function(el){
+      el.textContent = el.getAttribute('data-count') + (el.getAttribute('data-suffix') || '');
+    });
+
+    softMotion();
+    document.querySelectorAll('.anim-up, .anim-line > .line > span')
+      .forEach(function(el){ el.classList.add('shown'); });
+  });
+
+  /* ---------- пересчёт после загрузки шрифтов ---------- */
+  if (document.fonts && document.fonts.ready){
+    document.fonts.ready.then(function(){ ScrollTrigger.refresh(); });
+  }
+})();
+</script>
+</html>
