@@ -6,10 +6,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Снос аварийных деревьев, кронирование, очистка кровель и высотные работы в Петрозаводске и Карелии. Работаем по договору, с актом и страхованием ответственности.">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;800;900&display=swap">
-<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<!-- Шрифт и иконки лежат рядом с сайтом: внешний CDN уже один раз
+     подвёл, а заказчик смотрит из Петрозаводска. -->
+<link rel="stylesheet" href="vendor/fonts/golos.css">
+<link rel="stylesheet" href="vendor/fonts/phosphor.css">
 
 <style>
   /* ============================================================
@@ -1030,7 +1030,7 @@
   window.__revealGuard = window.setTimeout(function(){
     root.classList.add('no-motion');
     window.__revealGuard = null;
-  }, 700);
+  }, 1500);  /* было 700: на медленном канале не хватало даже локальным файлам */
   window.__gsapFailed = function(){
     if (window.__revealGuard){ window.clearTimeout(window.__revealGuard); window.__revealGuard = null; }
     root.classList.add('no-motion');
@@ -1038,8 +1038,10 @@
 })();
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" onerror="window.__gsapFailed()"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" onerror="window.__gsapFailed()"></script>
+<!-- GSAP локальный. С CDN библиотека не укладывалась в страховочные
+     700 мс, страница помечалась no-motion и вся хореография отключалась. -->
+<script src="vendor/gsap.min.js" onerror="window.__gsapFailed()"></script>
+<script src="vendor/ScrollTrigger.min.js" onerror="window.__gsapFailed()"></script>
 
 <script>
 (function(){
